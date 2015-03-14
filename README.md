@@ -26,6 +26,16 @@ Return a file path or file contents, checking in child theme, then theme, then a
     
     return calderawp_file_locator( 'hats.json', 'slug_json_loader' );
     
+    //Use a special single-{$post-type}.php, in this case single-hat.php from plugin if theme/child theme doesn't have that file.
+add_filter( 'template_includes', function( $template ) {
+	if ( 'single-hat.php' == $template && ! is_file( calderawp_file_locator( $template ) ) ) {
+		$template = calderawp_file_locator( trailingslashit( plugin_dir_path( __FILE__ ) ) . $template );
+	}
+
+	return $template;
+
+}, 10 );
+    
 ```
   
 ### Can't you do this in WordPress Already?
